@@ -12,11 +12,11 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import jp.co.sss.lms.ct.page.FaqPage;
+import jp.co.sss.lms.ct.page.LoginPage;
 
 /**
  * 結合テスト よくある質問機能
@@ -45,8 +45,8 @@ public class Case06 {
 	void test01() {
 		// TODO ここに追加
 		goTo("http://localhost:8080/lms");
-		getEvidence(new Object() {
-		});
+
+		getEvidence(new Object() {});
 	}
 
 	@Test
@@ -54,34 +54,33 @@ public class Case06 {
 	@DisplayName("テスト02 初回ログイン済みの受講生ユーザーでログイン")
 	void test02() {
 		// TODO ここに追加
+
+		LoginPage loginPage = new LoginPage(webDriver);
+
 		//IDを入力（初回ログイン済み）
-		WebElement LoginId = webDriver.findElement(By.id("loginId"));
-		LoginId.clear();
-		LoginId.sendKeys("StudentAA01");
-
 		//PassWord(初回ログイン済み）を入力
-		WebElement Loginpass = webDriver.findElement(By.id("password"));
-		Loginpass.clear();
-		Loginpass.sendKeys("StudentAA02");
-
 		//ログインボタンをクリック
-		WebElement loginButton = webDriver.findElement(By.cssSelector("input[value='ログイン']"));
-
-		loginButton.click();
+		loginPage.login("StudentAA01", "StudentAA02");
 
 		//画面遷移にいくまで５秒待機
-		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		WebDriverWait wait =
+				new WebDriverWait(webDriver, Duration.ofSeconds(5));
 
 		wait.until(
 				ExpectedConditions.urlToBe(
-						"http://localhost:8080/lms/course/detail"));
+						"http://localhost:8080/lms/course/detail"
+				)
+		);
 
 		//URLをチェック
 		String currentUrl = webDriver.getCurrentUrl();
-		assertEquals("http://localhost:8080/lms/course/detail", currentUrl);
-		getEvidence(new Object() {
-		});
 
+		assertEquals(
+				"http://localhost:8080/lms/course/detail",
+				currentUrl
+		);
+
+		getEvidence(new Object() {});
 	}
 
 	@Test
@@ -89,135 +88,108 @@ public class Case06 {
 	@DisplayName("テスト03 上部メニューの「ヘルプ」リンクからヘルプ画面に遷移")
 	void test03() {
 		// TODO ここに追加
-		WebElement category = webDriver.findElement(By.linkText("機能"));
-		category.click();
 
-		webDriver.findElement(By.linkText("ヘルプ")).click();
+		FaqPage faqPage = new FaqPage(webDriver);
+
+		//「機能」をクリック
+		//「ヘルプ」をクリック
+		faqPage.clickHelp();
 
 		//画面遷移にいくまで５秒待機
-		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		WebDriverWait wait =
+				new WebDriverWait(webDriver, Duration.ofSeconds(5));
+
 		wait.until(
 				ExpectedConditions.urlToBe(
-						"http://localhost:8080/lms/help"));
+						"http://localhost:8080/lms/help"
+				)
+		);
 
 		//URLチェック
 		String currentUrl = webDriver.getCurrentUrl();
-		assertEquals("http://localhost:8080/lms/help", currentUrl);
 
-		getEvidence(new Object() {
-		});
+		assertEquals(
+				"http://localhost:8080/lms/help",
+				currentUrl
+		);
 
+		getEvidence(new Object() {});
 	}
 
 	@Test
 	@Order(4)
 	@DisplayName("テスト04 「よくある質問」リンクからよくある質問画面を別タブに開く")
 	void test04() {
-		// 現在のタブを保存
-		String originalWindow = webDriver.getWindowHandle();
 
-		webDriver.findElement(By.linkText("よくある質問")).click();
+		FaqPage faqPage = new FaqPage(webDriver);
+
+		// 現在のタブを保存
+		//「よくある質問」をクリック
+		// 別タブが開くまで待つ
+		// 新しく開いたタブへ切り替える
+		faqPage.openFaq();
 
 		//画面遷移にいくまで５秒待機
-		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-		// 別タブが開くまで待つ
-		wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-
-		// 新しく開いたタブへ切り替える
-		for (String windowHandle : webDriver.getWindowHandles()) {
-
-			if (!windowHandle.equals(originalWindow)) {
-				webDriver.switchTo().window(windowHandle);
-				break;
-			}
-		}
+		WebDriverWait wait =
+				new WebDriverWait(webDriver, Duration.ofSeconds(5));
 
 		// FAQ画面に遷移するまで待機
-		wait.until(ExpectedConditions.urlToBe("http://localhost:8080/lms/faq"));
+		wait.until(
+				ExpectedConditions.urlToBe(
+						"http://localhost:8080/lms/faq"
+				)
+		);
 
 		//URLチェック
 		String currentUrl = webDriver.getCurrentUrl();
-		assertEquals("http://localhost:8080/lms/faq", currentUrl);
+
+		assertEquals(
+				"http://localhost:8080/lms/faq",
+				currentUrl
+		);
 
 		getEvidence(new Object() {});
 	}
-	
+
 	@Test
 	@Order(5)
 	@DisplayName("テスト05 カテゴリ検索で該当カテゴリの検索結果だけ表示")
 	void test05() {
-		
+
+		FaqPage faqPage = new FaqPage(webDriver);
+
 		//研修関係のリンクをクリックする。
-		WebElement category =webDriver.findElement(By.linkText("【研修関係】"));
+		faqPage.clickTrainingCategory();
 
-		category.click();
-		
-		 // 検索結果が表示されるまで待つ
-	    WebDriverWait wait =new WebDriverWait(webDriver, Duration.ofSeconds(5));
-		
+		// 検索結果が表示されるまで待つ
+
 		// 検索結果確認①
-	    WebElement result1 = wait.until(
-	            ExpectedConditions.visibilityOfElementLocated(
-	                    By.xpath("//*[contains(text(),'キャンセル料・途中退校について')]")
-	            ));
-	    
-	 // 検索結果確認②
-	    WebElement result2 = wait.until(
-	            ExpectedConditions.visibilityOfElementLocated(
-	                    By.xpath("//*[contains(text(),'研修の申し込みはどのようにすれば良いですか？')]")
-	            ));
+		assertTrue(faqPage.isResult1Displayed());
 
-		assertTrue(result1.isDisplayed());
-		assertTrue(result2.isDisplayed());
+		// 検索結果確認②
+		assertTrue(faqPage.isResult2Displayed());
+
 		getEvidence(new Object() {});
 	}
+
 	@Test
 	@Order(6)
 	@DisplayName("テスト06 検索結果の質問をクリックしその回答を表示")
 	void test06() {
 
-	    WebDriverWait wait =
-	            new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		FaqPage faqPage = new FaqPage(webDriver);
 
-	    // 検索結果が2件表示されるまで待つ
-	    wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(
-	            By.cssSelector("dl[id^='question-h']"), 1));
+		// 検索結果が2件表示されるまで待つ
 
-	    // 1件目
-	    WebElement question1 = webDriver
-	            .findElements(By.cssSelector("dl[id^='question-h']"))
-	            .get(0);
+		// 1件目
+		assertTrue(faqPage.openQuestion(0));
 
-	    WebElement answer1 =
-	            question1.findElement(By.cssSelector("dd[id^='answer-h']"));
+		// 2件目
+		assertTrue(faqPage.openQuestion(1));
 
-	    question1.click();
+		// 2つ目の回答までスクロール
+		faqPage.scrollToAnswer(1);
 
-	    wait.until(ExpectedConditions.visibilityOf(answer1));
-
-	    assertTrue(answer1.isDisplayed());
-
-
-	    // 2件目
-	    WebElement question2 = webDriver
-	            .findElements(By.cssSelector("dl[id^='question-h']"))
-	            .get(1);
-
-	    WebElement answer2 =
-	            question2.findElement(By.cssSelector("dd[id^='answer-h']"));
-
-	    question2.click();
-
-	    wait.until(ExpectedConditions.visibilityOf(answer2));
-
-	    assertTrue(answer2.isDisplayed());
-
-	 // 2つ目の回答までスクロール
-	    JavascriptExecutor js = (JavascriptExecutor) webDriver;
-	    js.executeScript("arguments[0].scrollIntoView({block:'center'});", answer2);
-
-	    getEvidence(new Object() {});
+		getEvidence(new Object() {});
 	}
-	
-
 }

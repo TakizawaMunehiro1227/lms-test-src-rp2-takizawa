@@ -12,10 +12,10 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import jp.co.sss.lms.ct.page.LoginPage;
 
 /**
  * 結合テスト ログイン機能①
@@ -42,8 +42,11 @@ public class Case03 {
 	@Order(1)
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() {
-		// TODO ここに追加
+
+		// トップページURLでアクセス
 		goTo("http://localhost:8080/lms");
+
+		// エビデンスを取得
 		getEvidence(new Object() {});
 	}
 
@@ -51,39 +54,32 @@ public class Case03 {
 	@Order(2)
 	@DisplayName("テスト02 初回ログイン済みの受講生ユーザーでログイン")
 	void test02() {
-		
-		//IDを入力（初回ログイン済み）
-		WebElement LoginId = webDriver.findElement(By.id("loginId"));
-		LoginId.clear();
-		LoginId.sendKeys("StudentAA01");
-		
-		//PassWord(初回ログイン済み）を入力
-		WebElement Loginpass = webDriver.findElement(By.id("password"));
-		Loginpass.clear();
-		Loginpass.sendKeys("StudentAA02");
-		
-		//ログインボタンをクリック
-		WebElement loginButton = webDriver.findElement(By.cssSelector("input[value='ログイン']"));
-		
-		loginButton.click();
-		
-		//画面遷移にいくまで５秒待機
+
+		// LoginPageを生成
+		LoginPage loginPage = new LoginPage(webDriver);
+
+		// 初回ログイン済みの受講生ユーザーでログイン
+		loginPage.login("StudentAA01", "StudentAA02");
+
+		// コース詳細画面へ遷移するまで最大5秒待機
 		WebDriverWait wait =
-		        new WebDriverWait(webDriver, Duration.ofSeconds(5));
+				new WebDriverWait(webDriver, Duration.ofSeconds(5));
 
 		wait.until(
-		        ExpectedConditions.urlToBe(
-		                "http://localhost:8080/lms/course/detail"
-		        )
+				ExpectedConditions.urlToBe(
+						"http://localhost:8080/lms/course/detail"
+				)
 		);
-		
-		//URLをチェック
-		String currentUrl=webDriver.getCurrentUrl();
-		assertEquals("http://localhost:8080/lms/course/detail",currentUrl);
-		
-		//エビデンスを取得
-				getEvidence(new Object() {});
-	}
-	
 
+		// URLをチェック
+		String currentUrl = webDriver.getCurrentUrl();
+
+		assertEquals(
+				"http://localhost:8080/lms/course/detail",
+				currentUrl
+		);
+
+		// エビデンスを取得
+		getEvidence(new Object() {});
+	}
 }
