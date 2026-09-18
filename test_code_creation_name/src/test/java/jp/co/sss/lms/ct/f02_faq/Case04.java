@@ -46,13 +46,13 @@ public class Case04 {
 	void test01() {
 		// TODO ここに追加
 		goTo("http://localhost:8080/lms");
-		
+
 		// ログイン画面が表示されていることを確認
 		assertTrue(
-				webDriver.findElement(By.id("loginId")).isDisplayed()
-		);
+				webDriver.findElement(By.id("loginId")).isDisplayed());
 
-		getEvidence(new Object() {});
+		getEvidence(new Object() {
+		});
 	}
 
 	@Test
@@ -69,24 +69,21 @@ public class Case04 {
 		loginPage.login("StudentAA01", "StudentAA02");
 
 		//画面遷移にいくまで５秒待機
-		WebDriverWait wait =
-				new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 
 		wait.until(
 				ExpectedConditions.urlToBe(
-						"http://localhost:8080/lms/course/detail"
-				)
-		);
+						"http://localhost:8080/lms/course/detail"));
 
 		//URLをチェック
 		String currentUrl = webDriver.getCurrentUrl();
 
 		assertEquals(
 				"http://localhost:8080/lms/course/detail",
-				currentUrl
-		);
+				currentUrl);
 
-		getEvidence(new Object() {});
+		getEvidence(new Object() {
+		});
 	}
 
 	@Test
@@ -102,24 +99,21 @@ public class Case04 {
 		faqPage.clickHelp();
 
 		//画面遷移にいくまで５秒待機
-		WebDriverWait wait =
-				new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 
 		wait.until(
 				ExpectedConditions.urlToBe(
-						"http://localhost:8080/lms/help"
-				)
-		);
+						"http://localhost:8080/lms/help"));
 
 		//URLチェック
 		String currentUrl = webDriver.getCurrentUrl();
 
 		assertEquals(
 				"http://localhost:8080/lms/help",
-				currentUrl
-		);
+				currentUrl);
 
-		getEvidence(new Object() {});
+		getEvidence(new Object() {
+		});
 	}
 
 	@Test
@@ -136,34 +130,39 @@ public class Case04 {
 		faqPage.openFaq();
 
 		//画面遷移にいくまで５秒待機
-		WebDriverWait wait =
-				new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 
 		// FAQ画面に遷移するまで待機
 		wait.until(
 				ExpectedConditions.urlToBe(
-						"http://localhost:8080/lms/faq"
-				)
-		);
+						"http://localhost:8080/lms/faq"));
 
 		//URLチェック
 		String currentUrl = webDriver.getCurrentUrl();
 
 		assertEquals(
 				"http://localhost:8080/lms/faq",
-				currentUrl
-		);
+				currentUrl);
 
-		getEvidence(new Object() {});
+		getEvidence(new Object() {
+		});
 	}
-	
+
 	/*
 	 * 【同値分割・境界値分析の確認】
-	 * 画面遷移を確認するテストのため、数値や文字数などの
-	 * 境界値を持つ入力項目はなく、境界値分析の対象外となる。
+	 * ログインID、パスワードの入力項目がある。
 	 *
-	 * ヘルプリンク、よくある質問リンクを正常に操作できる場合を
-	 * 正常系の同値クラスとして確認している。
+	 * 本テストでは、登録済みの正しいログインID・パスワードを入力し、
+	 * 正常にログインできる場合を正常系の同値クラスとして確認している。
+	 *
+	 * 未登録のログインID、誤ったパスワード、未入力などは
+	 * 異常系の同値クラスとして考えられるが、本ケースでは対象外とする。
+	 *
+	 * 文字数の上限・下限などが仕様として定められている場合は
+	 * 境界値分析の対象となるが、本ケースでは画面遷移の確認を主目的としているため、
+	 * 境界値の確認は実施していない。
+	 *
+	 * また、ヘルプリンク、よくある質問リンクを正常に操作できることを確認している。
 	 */
 
 	/*
