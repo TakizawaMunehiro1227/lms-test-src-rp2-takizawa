@@ -61,7 +61,7 @@ public class Case02 {
 		LoginPage loginPage = new LoginPage(webDriver);
 
 		// DB未登録ユーザーでログイン
-		loginPage.login("1", "StudentAA01");
+		loginPage.login("student001", "StudentAA01");
 
 		// エラーメッセージが表示されていることを確認
 		assertTrue(loginPage.isErrorMessageDisplayed());
