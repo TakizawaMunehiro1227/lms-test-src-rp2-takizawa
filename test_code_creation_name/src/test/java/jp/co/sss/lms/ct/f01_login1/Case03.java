@@ -12,6 +12,7 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -45,6 +46,12 @@ public class Case03 {
 
 		// トップページURLでアクセス
 		goTo("http://localhost:8080/lms");
+		
+		// ログイン画面が表示されていることを確認
+		assertTrue(
+				webDriver.findElement(By.id("loginId")).isDisplayed()
+		);
+
 
 		// エビデンスを取得
 		getEvidence(new Object() {});
