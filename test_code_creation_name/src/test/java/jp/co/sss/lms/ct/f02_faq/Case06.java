@@ -43,7 +43,7 @@ public class Case06 {
 	@Order(1)
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() {
-		// TODO ここに追加
+		
 		goTo("http://localhost:8080/lms");
 
 		getEvidence(new Object() {});
@@ -53,7 +53,6 @@ public class Case06 {
 	@Order(2)
 	@DisplayName("テスト02 初回ログイン済みの受講生ユーザーでログイン")
 	void test02() {
-		// TODO ここに追加
 
 		LoginPage loginPage = new LoginPage(webDriver);
 
@@ -87,7 +86,6 @@ public class Case06 {
 	@Order(3)
 	@DisplayName("テスト03 上部メニューの「ヘルプ」リンクからヘルプ画面に遷移")
 	void test03() {
-		// TODO ここに追加
 
 		FaqPage faqPage = new FaqPage(webDriver);
 
@@ -158,10 +156,8 @@ public class Case06 {
 
 		FaqPage faqPage = new FaqPage(webDriver);
 
-		//研修関係のリンクをクリックする。
+		//研修関係のカテゴリを選択。
 		faqPage.clickTrainingCategory();
-
-		// 検索結果が表示されるまで待つ
 
 		// 検索結果確認①
 		assertTrue(faqPage.isResult1Displayed());
@@ -179,12 +175,11 @@ public class Case06 {
 
 		FaqPage faqPage = new FaqPage(webDriver);
 
-		// 検索結果が2件表示されるまで待つ
 
-		// 1件目
+		// 1件目の質問をクリックし、回答表示を確認
 		assertTrue(faqPage.openQuestion(0));
 
-		// 2件目
+		// 2件目の質問をクリックし、回答表示を確認
 		assertTrue(faqPage.openQuestion(1));
 
 		// 2つ目の回答までスクロール

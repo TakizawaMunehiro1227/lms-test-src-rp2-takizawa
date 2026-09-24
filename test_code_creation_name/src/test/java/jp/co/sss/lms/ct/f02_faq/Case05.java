@@ -43,7 +43,7 @@ public class Case05 {
 	@Order(1)
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() {
-		// TODO ここに追加
+		
 		goTo("http://localhost:8080/lms");
 
 		getEvidence(new Object() {});
@@ -53,7 +53,6 @@ public class Case05 {
 	@Order(2)
 	@DisplayName("テスト02 初回ログイン済みの受講生ユーザーでログイン")
 	void test02() {
-		// TODO ここに追加
 
 		LoginPage loginPage = new LoginPage(webDriver);
 
@@ -87,7 +86,6 @@ public class Case05 {
 	@Order(3)
 	@DisplayName("テスト03 上部メニューの「ヘルプ」リンクからヘルプ画面に遷移")
 	void test03() {
-		// TODO ここに追加
 
 		FaqPage faqPage = new FaqPage(webDriver);
 
@@ -164,7 +162,6 @@ public class Case05 {
 		// 検索ボタンをクリック
 		faqPage.clickSearch();
 
-		// 検索結果が表示されるまで待つ
 
 		// 検索結果確認
 		assertTrue(faqPage.isCancelResultDisplayed());
@@ -176,7 +173,6 @@ public class Case05 {
 	@Order(6)
 	@DisplayName("テスト06 「クリア」ボタン押下で入力したキーワードを消去")
 	void test06() {
-		// TODO ここに追加
 
 		FaqPage faqPage = new FaqPage(webDriver);
 
