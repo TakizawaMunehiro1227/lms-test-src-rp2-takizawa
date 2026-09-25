@@ -93,6 +93,22 @@ public class Case16 {
 	    loginPage.clickSecurityCheck();
 
 	    loginPage.clickNext();
+	    
+	    WebDriverWait wait =
+	            new WebDriverWait(webDriver, Duration.ofSeconds(5));
+
+	    wait.until(
+	            ExpectedConditions.urlToBe(
+	                    "http://localhost:8080/lms/password/changePassword"
+	            )
+	    );
+
+	    String currentUrl = webDriver.getCurrentUrl();
+
+	    assertEquals(
+	            "http://localhost:8080/lms/password/changePassword",
+	            currentUrl
+	    );
 
 
 	    getEvidence(new Object() {});
