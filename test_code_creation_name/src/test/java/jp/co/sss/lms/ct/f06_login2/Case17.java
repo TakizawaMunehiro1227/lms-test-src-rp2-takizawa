@@ -1,6 +1,9 @@
 package jp.co.sss.lms.ct.f06_login2;
 
 import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
+import static org.junit.Assert.*;
+
+import java.time.Duration;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,6 +12,10 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import jp.co.sss.lms.ct.page.LoginPage;
 
 /**
  * 結合テスト ログイン機能②
@@ -35,28 +42,96 @@ public class Case17 {
 	@Order(1)
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() {
-		// TODO ここに追加
+
+		// トップページURLでアクセス
+		goTo("http://localhost:8080/lms");
+
+		// エビデンス取得
+		getEvidence(new Object() {
+		});
 	}
 
 	@Test
 	@Order(2)
 	@DisplayName("テスト02 DBに初期登録された未ログインの受講生ユーザーでログイン")
-	void test02() {
-		// TODO ここに追加
+	void test02() throws Exception {
+
+		LoginPage loginPage = new LoginPage(webDriver);
+
+		// 未ログインの受講生ユーザーでログイン
+		loginPage.login("StudentAA01", "StudentAA01");
+		
+		// Chromeのパスワード警告を閉じる
+		loginPage.closeChromePasswordWarning();
+		
+
+		// 遷移するまで待機
+		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+
+		wait.until(
+				ExpectedConditions.urlToBe(
+						"http://localhost:8080/lms/user/agreeSecurity"));
+
+		// URLチェック
+		String currentUrl = webDriver.getCurrentUrl();
+
+		assertEquals(
+				"http://localhost:8080/lms/user/agreeSecurity",
+				currentUrl);
+
+		getEvidence(new Object() {
+		});
 	}
 
 	@Test
 	@Order(3)
-	@DisplayName("テスト03 「同意します」チェックボックスにチェックを入れ「次へ」ボタン押下")
+	@DisplayName("テスト03 「同意します」チェックボックスにチェックをせず「次へ」ボタンを押下")
 	void test03() {
-		// TODO ここに追加
+
+	    LoginPage loginPage = new LoginPage(webDriver);
+	    
+	    loginPage.clickSecurityCheck();
+
+	    loginPage.clickNext();
+
+
+	    getEvidence(new Object() {});
 	}
 
 	@Test
 	@Order(4)
 	@DisplayName("テスト04 変更パスワードを入力し「変更」ボタン押下")
 	void test04() {
-		// TODO ここに追加
+		
+		LoginPage loginPage = new LoginPage(webDriver);
+		
+	    String newPassword = "StudentAA02";
+
+	    loginPage.inputChangePassword(
+	            "StudentAA01",
+	            newPassword,
+	            newPassword);
+
+	    loginPage.clickNext();
+	    loginPage.clickUpdateButton();
+	    
+		// コース詳細画面に遷移するまで待機
+		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+
+		wait.until(
+				ExpectedConditions.urlToBe(
+						"http://localhost:8080/lms/course/detail"));
+
+		// URLチェック
+		String currentUrl = webDriver.getCurrentUrl();
+
+		assertEquals(
+				"http://localhost:8080/lms/course/detail",
+				currentUrl);
+	    
+	    // エビデンス取得
+	    getEvidence(new Object() {});
+
 	}
 
 }
