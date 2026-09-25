@@ -77,6 +77,24 @@ public class ExamPage {
         wait.until(ExpectedConditions.elementToBeClickable(examStartButton));
         examStartButton.click();
     }
+    
+    public void selectAnswer(int questionIndex, int answerIndex) {
+
+        WebElement answer = wait.until(
+            ExpectedConditions.elementToBeClickable(
+                By.id("answer-" + questionIndex + "-" + answerIndex)
+            )
+        );
+
+        JavascriptExecutor js = (JavascriptExecutor) webDriver;
+
+        js.executeScript(
+            "arguments[0].scrollIntoView({block:'center'});",
+            answer
+        );
+
+        answer.click();
+    }
 
     public void clickConfirm() {
 
