@@ -143,7 +143,7 @@ public class Case08 {
 		ReportPage reportPage = new ReportPage(webDriver);
 
 		// 目標の達成度を修正
-		reportPage.inputAchievement("5");
+		reportPage.inputAchievement("3");
 
 		// 所感を修正
 		reportPage.inputImpression("週報の内容を修正しました。");
