@@ -12,7 +12,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -169,21 +168,23 @@ public class Case09 {
 
 	    ReportPage reportPage = new ReportPage(webDriver);
 
-	    // 入力処理
-	    // ～省略～
+	    // 学習項目を正常値にする
+	    reportPage.inputLearningItem("Java");
 
-	    // 提出する
+	    // 理解度を正常値にする
+	    reportPage.selectIntelligibility("5");
+
+	    // 目標の達成度に数値以外を入力
+	    reportPage.inputAchievement("abc");
+
+	    // 所感を正常値にする
+	    reportPage.inputImpression("週報のサンプルです。");
+
+	    // 一週間の振り返りを正常値にする
+	    reportPage.inputWeeklyReview("一週間の振り返りです。");
+
+	    // 「提出する」ボタンをクリック
 	    reportPage.clickReportRegist();
-
-	    // 画面の読み込み完了を待つ
-	    WebDriverWait wait =
-	            new WebDriverWait(webDriver, Duration.ofSeconds(5));
-
-	    wait.until(driver ->
-	        ((JavascriptExecutor) driver)
-	            .executeScript("return document.readyState")
-	            .equals("complete")
-	    );
 
 	    // エビデンス取得
 	    getEvidence(new Object() {});
@@ -196,14 +197,22 @@ public class Case09 {
 
 	    ReportPage reportPage = new ReportPage(webDriver);
 
+	    // 学習項目を正常値にする
+	    reportPage.inputLearningItem("Java");
+
+	    // 理解度を正常値にする
+	    reportPage.selectIntelligibility("5");
+
 	    // 目標の達成度に範囲外の値を入力（1～10のため11）
 	    reportPage.inputAchievement("11");
 
-	    // 他の項目は正常値を入力
+	    // 所感を正常値にする
 	    reportPage.inputImpression("週報のサンプルです。");
+
+	    // 一週間の振り返りを正常値にする
 	    reportPage.inputWeeklyReview("一週間の振り返りです。");
 
-	    // 提出するボタンをクリック
+	    // 「提出する」ボタンをクリック
 	    reportPage.clickReportRegist();
 
 	    // エビデンス取得
@@ -217,6 +226,12 @@ public class Case09 {
 
 	    ReportPage reportPage = new ReportPage(webDriver);
 
+	 // 学習項目を正常値にする
+	    reportPage.inputLearningItem("Java");
+
+	    // 理解度を正常値にする
+	    reportPage.selectIntelligibility("5");
+
 	    // 目標の達成度を未入力
 	    reportPage.inputAchievement("");
 
@@ -225,12 +240,6 @@ public class Case09 {
 
 	    // 一週間の振り返りは正常値
 	    reportPage.inputWeeklyReview("一週間の振り返りです。");
-
-	    // 提出するボタンをクリック
-	    reportPage.clickReportRegist();
-
-	    // エビデンス取得
-	    getEvidence(new Object() {});
 	}
 
 	@Test

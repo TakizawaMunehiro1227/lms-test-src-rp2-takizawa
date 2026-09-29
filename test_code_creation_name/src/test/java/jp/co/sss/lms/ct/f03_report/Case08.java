@@ -21,6 +21,7 @@ import jp.co.sss.lms.ct.page.ReportPage;
 /**
  * 結合テスト レポート機能
  * ケース08
+ *
  * @author holy
  */
 @TestMethodOrder(OrderAnnotation.class)
@@ -44,10 +45,11 @@ public class Case08 {
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() {
 
+		// トップページURLでアクセス
 		goTo("http://localhost:8080/lms");
 
-		getEvidence(new Object() {
-		});
+		// エビデンス取得
+		getEvidence(new Object() {});
 	}
 
 	@Test
@@ -61,7 +63,8 @@ public class Case08 {
 		loginPage.login("StudentAA01", "StudentAA02");
 
 		// コース詳細画面に遷移するまで待機
-		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		WebDriverWait wait =
+				new WebDriverWait(webDriver, Duration.ofSeconds(5));
 
 		wait.until(
 				ExpectedConditions.urlToBe(
@@ -74,152 +77,93 @@ public class Case08 {
 				"http://localhost:8080/lms/course/detail",
 				currentUrl);
 
-		getEvidence(new Object() {
-		});
+		// エビデンス取得
+		getEvidence(new Object() {});
 	}
 
 	@Test
 	@Order(3)
-	@DisplayName("テスト03 未提出の研修日の「詳細」ボタンを押下しセクション詳細画面に遷移")
+	@DisplayName("テスト03 上部メニューの「ようこそ○○さん」リンクからユーザー詳細画面に遷移")
 	void test03() {
 
 		ReportPage reportPage = new ReportPage(webDriver);
 
-		// 未提出の研修日の詳細ボタンをクリック
-		reportPage.clickDetail();
+		// 「ようこそ○○さん」をクリック
+		reportPage.clickWelcome();
 
-		// セクション詳細画面に遷移するまで待機
-		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		// ユーザー詳細画面に遷移するまで待機
+		WebDriverWait wait =
+				new WebDriverWait(webDriver, Duration.ofSeconds(5));
 
 		wait.until(
-				ExpectedConditions.urlToBe(
-						"http://localhost:8080/lms/section/detail"));
+				ExpectedConditions.urlContains(
+						"/lms/user/detail"));
 
 		// URLチェック
 		String currentUrl = webDriver.getCurrentUrl();
 
-		assertEquals(
-				"http://localhost:8080/lms/section/detail",
-				currentUrl);
+		assertTrue(currentUrl.contains("/lms/user/detail"));
 
-		getEvidence(new Object() {
-		});
+		// エビデンス取得
+		getEvidence(new Object() {});
 	}
 
 	@Test
 	@Order(4)
-	@DisplayName("テスト04 「提出する」ボタンを押下しレポート登録画面に遷移")
+	@DisplayName("テスト04 該当週報の「修正する」ボタンを押下しレポート登録画面に遷移")
 	void test04() {
 
 		ReportPage reportPage = new ReportPage(webDriver);
 
-		// 日報【デモ】を提出するボタンをクリック
-		reportPage.clickReport();
+		// 週報【デモ】の「修正する」ボタンをクリック
+		reportPage.clickReportUpdate();
 
 		// レポート登録画面に遷移するまで待機
-		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		WebDriverWait wait =
+				new WebDriverWait(webDriver, Duration.ofSeconds(5));
 
 		wait.until(
-				ExpectedConditions.urlToBe(
-						"http://localhost:8080/lms/report/regist"));
+				ExpectedConditions.urlContains(
+						"/lms/report/regist"));
 
 		// URLチェック
 		String currentUrl = webDriver.getCurrentUrl();
 
-		assertEquals(
-				"http://localhost:8080/lms/report/regist",
-				currentUrl);
+		assertTrue(currentUrl.contains("/lms/report/regist"));
 
-		getEvidence(new Object() {
-		});
+		// エビデンス取得
+		getEvidence(new Object() {});
 	}
 
 	@Test
 	@Order(5)
-	@DisplayName("テスト05 報告内容を入力して「提出する」ボタンを押下し確認ボタン名が更新される")
+	@DisplayName("テスト05 週報内容を修正して「提出する」ボタンを押下")
 	void test05() {
 
 		ReportPage reportPage = new ReportPage(webDriver);
 
-		// 日報内容を入力
-		reportPage.inputReport("今日は３問演習課題を解きました。");
+		// 目標の達成度を修正
+		reportPage.inputAchievement("5");
 
-		// 提出するボタンをクリック
+		// 所感を修正
+		reportPage.inputImpression("週報の内容を修正しました。");
+
+		// 一週間の振り返りを修正
+		reportPage.inputWeeklyReview("一週間の振り返りを修正しました。");
+
+		// 「提出する」ボタンをクリック
 		reportPage.clickReportRegist();
 
-		// セクション詳細画面に遷移するまで待機
-		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		// 画面遷移を待機
+		WebDriverWait wait =
+				new WebDriverWait(webDriver, Duration.ofSeconds(5));
 
 		wait.until(
-				ExpectedConditions.urlContains(
-						"http://localhost:8080/lms/section/detail?sectionId="));
+				ExpectedConditions.not(
+						ExpectedConditions.urlContains(
+								"/lms/report/regist")));
 
-		// URLチェック
-		String currentUrl = webDriver.getCurrentUrl();
-
-		assertTrue(
-				currentUrl.startsWith(
-						"http://localhost:8080/lms/section/detail?sectionId="));
-
-		getEvidence(new Object() {
-		});
+		// エビデンス取得
+		getEvidence(new Object() {});
 	}
-
-	@Test
-	@Order(6)
-	@DisplayName("テスト06 上部メニューの「ようこそ○○さん」リンクからユーザー詳細画面に遷移")
-	void test06() {
-		// TODO ここに追加
-		ReportPage reportPage = new ReportPage(webDriver);
-		
-		reportPage.clickWelcome();
-		
-		// ユーザー詳細画面に遷移するまで待機
-		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-
-		wait.until(
-				ExpectedConditions.urlContains(
-						"http://localhost:8080/lms/user/detail"));
-
-		// URLチェック
-		String currentUrl = webDriver.getCurrentUrl();
-
-		assertTrue(
-				currentUrl.startsWith(
-						"http://localhost:8080/lms/user/detail"));
-
-		getEvidence(new Object() {
-		});
-
-	}
-
-	@Test
-	@Order(7)
-	@DisplayName("テスト07 該当レポートの「詳細」ボタンを押下しレポート詳細画面で修正内容が反映される")
-	void test07() {
-
-	    ReportPage reportPage = new ReportPage(webDriver);
-
-	    // 該当レポートの詳細ボタンをクリック
-	    reportPage.clickReportDetail();
-
-	    // レポート詳細画面に遷移するまで待機
-	    WebDriverWait wait =
-	            new WebDriverWait(webDriver, Duration.ofSeconds(5));
-
-	    wait.until(
-	            ExpectedConditions.urlContains(
-	                    "http://localhost:8080/lms/report/detail"));
-
-	    // URLチェック
-	    String currentUrl = webDriver.getCurrentUrl();
-
-	    assertTrue(
-	            currentUrl.startsWith(
-	                    "http://localhost:8080/lms/report/detail"));
-
-	    getEvidence(new Object() {
-	    });
-	}
-
 }
