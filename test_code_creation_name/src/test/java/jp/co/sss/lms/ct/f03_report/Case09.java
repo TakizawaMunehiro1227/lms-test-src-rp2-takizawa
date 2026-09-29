@@ -172,7 +172,7 @@ public class Case09 {
 	    reportPage.inputLearningItem("Java");
 
 	    // 理解度を正常値にする
-	    reportPage.selectIntelligibility("5");
+	    reportPage.selectIntelligibility("3");
 
 	    // 目標の達成度に数値以外を入力
 	    reportPage.inputAchievement("abc");
@@ -201,7 +201,7 @@ public class Case09 {
 	    reportPage.inputLearningItem("Java");
 
 	    // 理解度を正常値にする
-	    reportPage.selectIntelligibility("5");
+	    reportPage.selectIntelligibility("3");
 
 	    // 目標の達成度に範囲外の値を入力（1～10のため11）
 	    reportPage.inputAchievement("11");
@@ -230,7 +230,7 @@ public class Case09 {
 	    reportPage.inputLearningItem("Java");
 
 	    // 理解度を正常値にする
-	    reportPage.selectIntelligibility("5");
+	    reportPage.selectIntelligibility("3");
 
 	    // 目標の達成度を未入力
 	    reportPage.inputAchievement("");
@@ -250,7 +250,7 @@ public class Case09 {
 	    ReportPage reportPage = new ReportPage(webDriver);
 
 	    // 目標の達成度は正常値
-	    reportPage.inputAchievement("5");
+	    reportPage.inputAchievement("3");
 
 	    // 2001文字の文字列を作成
 	    String overText = "あ".repeat(2001);
