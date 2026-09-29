@@ -22,7 +22,7 @@ public class ReportPage {
 	private WebElement detailLink;
 	
 
-	
+	//日報【デモ】を提出するボタン
     @FindBy(css = "input[value='日報【デモ】を提出する']")
     private WebElement reportButton;
 	
@@ -35,6 +35,7 @@ public class ReportPage {
     @FindBy(tagName = "textarea")
 	private WebElement reportText;
     
+    //ようこそリンク
     @FindBy(partialLinkText = "ようこそ")
     private WebElement welcomeLink;
     
@@ -91,6 +92,7 @@ public class ReportPage {
         reportButton.click();
     }
     
+    //レポート提出するボタンをクリック
     public void clickReportRegist() {
 
         // 提出するボタンまでスクロール
@@ -128,7 +130,7 @@ public class ReportPage {
 		welcomeLink.click();
 	}
 	
-	// 提出済みレポートの詳細をクリック
+	
 	// 提出済みレポートの詳細をクリック
 	public void clickReportDetail() {
 
@@ -139,16 +141,19 @@ public class ReportPage {
 	            reportDetailButton);
 	}
 	
+	//目標の達成度を登録
 	public void inputAchievement(String text) {
 	    achievement.clear();
 	    achievement.sendKeys(text);
 	}
 
+	//所感を登録
 	public void inputImpression(String text) {
 	    impression.clear();
 	    impression.sendKeys(text);
 	}
 
+	//週報を登録
 	public void inputWeeklyReview(String text) {
 	    weeklyReview.clear();
 	    weeklyReview.sendKeys(text);

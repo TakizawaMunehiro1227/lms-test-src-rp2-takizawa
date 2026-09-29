@@ -85,34 +85,35 @@ public class Case12 {
 	@DisplayName("テスト03 上部メニューの「勤怠」リンクから勤怠管理画面に遷移")
 	void test03() {
 
-	    AttendancePage attendancePage =
-	            new AttendancePage(webDriver);
+		AttendancePage attendancePage =
+				new AttendancePage(webDriver);
 
-	    // 「勤怠」をクリック
-	    attendancePage.clickAttendance();
+		// 「勤怠」をクリック
+		attendancePage.clickAttendance();
 
-	    // 警告ダイアログが表示された場合はOKをクリック
-	    attendancePage.acceptAlertIfPresent();
+		// 警告ダイアログが表示された場合はOKをクリック
+		attendancePage.acceptAlertIfPresent();
 
-	    // URLチェック
-	    String currentUrl = webDriver.getCurrentUrl();
+		// URLチェック
+		String currentUrl = webDriver.getCurrentUrl();
 
-	    assertEquals(
-	            "http://localhost:8080/lms/attendance/detail",
-	            currentUrl);
+		assertEquals(
+				"http://localhost:8080/lms/attendance/detail",
+				currentUrl);
 
-	    // エビデンス取得
-	    getEvidence(new Object() {});
+		// エビデンス取得
+		getEvidence(new Object() {});
 	}
 
 	@Test
 	@Order(4)
 	@DisplayName("テスト04 「勤怠情報を直接編集する」リンクから勤怠情報直接変更画面に遷移")
 	void test04() {
-		// TODO ここに追加
-		AttendancePage attendancePage = new AttendancePage(webDriver);
 
-		// 「勤怠」をクリック
+		AttendancePage attendancePage =
+				new AttendancePage(webDriver);
+
+		// 「勤怠情報を直接編集する」をクリック
 		attendancePage.clickAttendanceChange();
 
 		// URLチェック
@@ -125,133 +126,119 @@ public class Case12 {
 		getEvidence(new Object() {
 		});
 	}
-	
+
 	@Test
 	@Order(5)
 	@DisplayName("テスト05 不適切な内容で修正してエラー表示：出退勤の（時）と（分）のいずれかが空白")
 	void test05() {
 
-	    AttendancePage attendancePage =
-	            new AttendancePage(webDriver);
+		AttendancePage attendancePage =
+				new AttendancePage(webDriver);
 
-	    // 1行目だけ変更
-	    // 出勤 09:空白、退勤 18:00
-	    attendancePage.inputMissingMinute(0);
+		// 出勤09:空白、退勤18:00
+		attendancePage.inputMissingMinute(0);
 
-	    // 更新
-	    attendancePage.clickUpdate();
+		// 更新
+		attendancePage.clickUpdate();
 
-	    // エラーメッセージ確認
-	    assertEquals(
-	    	    "* 出勤時間が正しく入力されていません。",
-	    	    attendancePage.getErrorMessage()
-	    	);
+		// エラーメッセージ確認
+		assertEquals(
+				"* 出勤時間が正しく入力されていません。",
+				attendancePage.getErrorMessage());
 
-	    // エビデンス取得
-	    getEvidence(new Object() {});
+		// エビデンス取得
+		getEvidence(new Object() {});
 	}
-
 
 	@Test
 	@Order(6)
 	@DisplayName("テスト06 不適切な内容で修正してエラー表示：出勤が空白で退勤に入力あり")
 	void test06() {
 
-	    AttendancePage attendancePage =
-	            new AttendancePage(webDriver);
+		AttendancePage attendancePage =
+				new AttendancePage(webDriver);
 
-	    // 1行目だけ変更
-	    // 出勤：空白、退勤：18:00
-	    attendancePage.inputOnlyEndTime(0);
+		// 出勤：空白、退勤：18:00
+		attendancePage.inputOnlyEndTime(0);
 
-	    // 更新
-	    attendancePage.clickUpdate();
+		// 更新
+		attendancePage.clickUpdate();
 
-	    // エラーメッセージ確認
-	    assertEquals(
-	    	    "* 出勤情報がないため退勤情報を入力出来ません。",
-	    	    attendancePage.getErrorMessage()
-	    	);
+		// エラーメッセージ確認
+		assertEquals(
+				"* 出勤情報がないため退勤情報を入力出来ません。",
+				attendancePage.getErrorMessage());
 
-	    // エビデンス取得
-	    getEvidence(new Object() {});
+		// エビデンス取得
+		getEvidence(new Object() {});
 	}
-
 
 	@Test
 	@Order(7)
 	@DisplayName("テスト07 不適切な内容で修正してエラー表示：出勤が退勤よりも遅い時間")
 	void test07() {
 
-	    AttendancePage attendancePage =
-	            new AttendancePage(webDriver);
+		AttendancePage attendancePage =
+				new AttendancePage(webDriver);
 
-	    // 1行目だけ変更
-	    // 出勤18:00、退勤09:00
-	    attendancePage.inputStartAfterEnd(0);
+		// 出勤18:00、退勤09:00
+		attendancePage.inputStartAfterEnd(0);
 
-	    // 更新
-	    attendancePage.clickUpdate();
+		// 更新
+		attendancePage.clickUpdate();
 
-	    // エラーメッセージ確認
-	    assertEquals(
-	    	    "* 退勤時刻[0]は出勤時刻[0]より後でなければいけません。",
-	    	    attendancePage.getErrorMessage()
-	    	);
+		// エラーメッセージ確認
+		assertEquals(
+				"* 退勤時刻[0]は出勤時刻[0]より後でなければいけません。",
+				attendancePage.getErrorMessage());
 
-	    // エビデンス取得
-	    getEvidence(new Object() {});
+		// エビデンス取得
+		getEvidence(new Object() {});
 	}
-
 
 	@Test
 	@Order(8)
 	@DisplayName("テスト08 不適切な内容で修正してエラー表示：出退勤時間を超える中抜け時間")
 	void test08() {
 
-	    AttendancePage attendancePage =
-	            new AttendancePage(webDriver);
+		AttendancePage attendancePage =
+				new AttendancePage(webDriver);
 
-	    // 1行目だけ変更
-	    // 09:00～10:00に対して長すぎる中抜け時間
-	    attendancePage.inputInvalidBlankTime(0);
+		// 09:00～10:00に対して長すぎる中抜け時間
+		attendancePage.inputInvalidBlankTime(0);
 
-	    // 更新
-	    attendancePage.clickUpdate();
+		// 更新
+		attendancePage.clickUpdate();
 
-	    // エラーメッセージ確認
-	    assertEquals(
-	    	    "* 中抜け時間が勤務時間を超えています。",
-	    	    attendancePage.getErrorMessage()
-	    	);
+		// エラーメッセージ確認
+		assertEquals(
+				"* 中抜け時間が勤務時間を超えています。",
+				attendancePage.getErrorMessage());
 
-	    // エビデンス取得
-	    getEvidence(new Object() {});
+		// エビデンス取得
+		getEvidence(new Object() {});
 	}
-
 
 	@Test
 	@Order(9)
 	@DisplayName("テスト09 不適切な内容で修正してエラー表示：備考が100文字超")
 	void test09() {
 
-	    AttendancePage attendancePage =
-	            new AttendancePage(webDriver);
+		AttendancePage attendancePage =
+				new AttendancePage(webDriver);
 
-	    // 1行目の備考だけ101文字にする
-	    attendancePage.inputNoteOver100(0);
+		// 1行目の備考を101文字にする
+		attendancePage.inputNoteOver100(0);
 
-	    // 更新
-	    attendancePage.clickUpdate();
+		// 更新
+		attendancePage.clickUpdate();
 
-	    // エラーメッセージ確認
-	    assertEquals(
-	    	    "* 備考の長さが最大値(100)を超えています。",
-	    	    attendancePage.getErrorMessage()
-	    	);
+		// エラーメッセージ確認
+		assertEquals(
+				"* 備考の長さが最大値(100)を超えています。",
+				attendancePage.getErrorMessage());
 
-	    // エビデンス取得
-	    getEvidence(new Object() {});
+		// エビデンス取得
+		getEvidence(new Object() {});
 	}
-
 }

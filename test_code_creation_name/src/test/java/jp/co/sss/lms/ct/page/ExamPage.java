@@ -68,16 +68,19 @@ public class ExamPage {
         examTrainingDetail.click();
     }
     
+    //試験詳細をクリック
     public void clickExamDetail() {
         wait.until(ExpectedConditions.elementToBeClickable(examDetail));
         examDetail.click();
     }
 
+    //試験スタートをクリック
     public void clickExamStart() {
         wait.until(ExpectedConditions.elementToBeClickable(examStartButton));
         examStartButton.click();
     }
     
+    //試験の解答をクリック
     public void selectAnswer(int questionIndex, int answerIndex) {
 
         WebElement answer = wait.until(
@@ -96,6 +99,9 @@ public class ExamPage {
         answer.click();
     }
 
+    
+    
+    //確認画面に進むボタンをクリック
     public void clickConfirm() {
 
         JavascriptExecutor js = (JavascriptExecutor) webDriver;
@@ -109,6 +115,8 @@ public class ExamPage {
         confirmButton.click();
     }
 
+    
+    //回答を送信するボタンをクリック
     public void clickSubmit() {
 
         JavascriptExecutor js = (JavascriptExecutor) webDriver;
@@ -129,6 +137,7 @@ public class ExamPage {
         alert.accept();
     }
     
+    //過去の試験結果を表示
     public boolean isExamResultDisplayed() {
 
         List<WebElement> results = webDriver.findElements(
@@ -139,6 +148,8 @@ public class ExamPage {
         return results.size() > 0;
     }
 
+    
+    //戻るボタンをクリック
     public void clickBack() {
 
         JavascriptExecutor js = (JavascriptExecutor) webDriver;

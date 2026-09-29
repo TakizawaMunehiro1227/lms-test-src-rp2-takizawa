@@ -85,11 +85,14 @@ public class Case11 {
 	@DisplayName("テスト03 上部メニューの「勤怠」リンクから勤怠管理画面に遷移")
 	void test03() {
 
-		AttendancePage attendancePage = new AttendancePage(webDriver);
+		AttendancePage attendancePage =
+				new AttendancePage(webDriver);
 
 		// 「勤怠」をクリック
 		attendancePage.clickAttendance();
 
+		// 警告ダイアログが表示された場合はOKをクリック
+		attendancePage.acceptAlertIfPresent();
 
 		// URLチェック
 		String currentUrl = webDriver.getCurrentUrl();
@@ -107,10 +110,11 @@ public class Case11 {
 	@Order(4)
 	@DisplayName("テスト04 「勤怠情報を直接編集する」リンクから勤怠情報直接変更画面に遷移")
 	void test04() {
-		// TODO ここに追加
-		AttendancePage attendancePage = new AttendancePage(webDriver);
 
-		// 「勤怠」をクリック
+		AttendancePage attendancePage =
+				new AttendancePage(webDriver);
+
+		// 「勤怠情報を直接編集する」をクリック
 		attendancePage.clickAttendanceChange();
 
 		// URLチェック
@@ -129,52 +133,58 @@ public class Case11 {
 	@DisplayName("テスト05 すべての研修日程の勤怠情報を正しく更新し勤怠管理画面に遷移")
 	void test05() {
 
-	    AttendancePage attendancePage = new AttendancePage(webDriver);
+		AttendancePage attendancePage =
+				new AttendancePage(webDriver);
 
-	 // 全研修日程の勤怠情報を変更
-	    attendancePage.updateAllAttendance();
+		// 全研修日程の勤怠情報を変更
+		attendancePage.updateAllAttendance();
 
-	    // 入力確認
-	    assertTrue(attendancePage.isAllAttendanceUpdated());
+		// 入力確認
+		assertTrue(
+				attendancePage.isAllAttendanceUpdated());
 
-	    // 画面描画待ち
-	    try {
-	        Thread.sleep(1000);
-	    } catch (InterruptedException e) {
-	        Thread.currentThread().interrupt();
-	    }
+		// 画面描画待ち
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
 
-	    // 上部
-	    scrollTo("0");
+		// 上部
+		scrollTo("0");
 
-	    try {
-	        Thread.sleep(500);
-	    } catch (InterruptedException e) {
-	        Thread.currentThread().interrupt();
-	    }
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
 
-	    getEvidence(new Object() {}, "top");
+		getEvidence(
+				new Object() {},
+				"top");
 
-	    // 下部
-	    scrollTo("10000");
+		// 下部
+		scrollTo("10000");
 
-	    try {
-	        Thread.sleep(500);
-	    } catch (InterruptedException e) {
-	        Thread.currentThread().interrupt();
-	    }
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
 
-	    getEvidence(new Object() {}, "bottom");
-	    // 更新
-	    attendancePage.clickUpdate();
+		getEvidence(
+				new Object() {},
+				"bottom");
 
-	    // 登録完了メッセージ確認
-	    assertEquals(
-	        "勤怠情報の登録が完了しました。",
-	        attendancePage.getMessage()
-	    );
+		// 更新
+		attendancePage.clickUpdate();
 
-	    // 更新後エビデンス
-	    getEvidence(new Object() {});
+		// 登録完了メッセージ確認
+		assertEquals(
+				"勤怠情報の登録が完了しました。",
+				attendancePage.getMessage());
+
+		// 更新後エビデンス
+		getEvidence(new Object() {});
 	}
 }

@@ -12,9 +12,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -47,11 +44,11 @@ public class Case10 {
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() {
 
-	    // トップページURLでアクセス
-	    goTo("http://localhost:8080/lms");
+		// トップページURLでアクセス
+		goTo("http://localhost:8080/lms");
 
-	    // エビデンス取得
-	    getEvidence(new Object() {});
+		// エビデンス取得
+		getEvidence(new Object() {});
 	}
 
 	@Test
@@ -82,77 +79,60 @@ public class Case10 {
 		});
 	}
 
-
 	@Test
 	@Order(3)
 	@DisplayName("テスト03 上部メニューの「勤怠」リンクから勤怠管理画面に遷移")
 	void test03() {
 
-	    AttendancePage attendancePage = new AttendancePage(webDriver);
+		AttendancePage attendancePage =
+				new AttendancePage(webDriver);
 
-	    // 「勤怠」をクリック
-	    attendancePage.clickAttendance();
+		// 「勤怠」をクリック
+		attendancePage.clickAttendance();
 
-	    // 最大5秒待機
-	    WebDriverWait wait =
-	            new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		// 警告ダイアログのOKをクリック
+		attendancePage.acceptAlert();
 
-	    // アラートが表示されるまで待機
-	    Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+		// 勤怠管理画面に遷移するまで待機
+		WebDriverWait wait =
+				new WebDriverWait(webDriver, Duration.ofSeconds(5));
 
-	    // アラートのOKをクリック
-	    alert.accept();
+		wait.until(
+				ExpectedConditions.urlToBe(
+						"http://localhost:8080/lms/attendance/detail"));
 
-	    // 勤怠管理画面への遷移を待機
-	    wait.until(
-	            ExpectedConditions.urlToBe(
-	                    "http://localhost:8080/lms/attendance/detail"));
+		// URLチェック
+		String currentUrl = webDriver.getCurrentUrl();
 
-	    // URLチェック
-	    String currentUrl = webDriver.getCurrentUrl();
+		assertEquals(
+				"http://localhost:8080/lms/attendance/detail",
+				currentUrl);
 
-	    assertEquals(
-	            "http://localhost:8080/lms/attendance/detail",
-	            currentUrl);
-
-	    // エビデンス取得
-	    getEvidence(new Object() {});
+		// エビデンス取得
+		getEvidence(new Object() {});
 	}
 
 	@Test
 	@Order(4)
 	@DisplayName("テスト04 「出勤」ボタンを押下し出勤時間を登録")
 	void test04() {
-		// TODO ここに追加
-		
-	    AttendancePage attendancePage = new AttendancePage(webDriver);
 
-	    // 「出勤」をクリック
-	    attendancePage.clickClockIn();
+		AttendancePage attendancePage =
+				new AttendancePage(webDriver);
 
-	    // 最大5秒待機
-	    WebDriverWait wait =
-	            new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		// 「出勤」をクリック
+		attendancePage.clickClockIn();
 
-	    // アラートが表示されるまで待機
-	    Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+		// 警告ダイアログのOKをクリック
+		attendancePage.acceptAlert();
 
-	    // アラートのOKをクリック
-	    alert.accept();
+		// 登録完了メッセージ確認
+		assertEquals(
+				"勤怠情報の登録が完了しました。",
+				attendancePage.getMessage());
 
-	 // 登録完了メッセージが表示されるまで待機
-	    WebElement message = wait.until(
-	            ExpectedConditions.visibilityOfElementLocated(
-	                    By.cssSelector("div.alert.alert-info > span")));
-
-	    // 登録完了メッセージを確認
-	    assertEquals(
-	            "勤怠情報の登録が完了しました。",
-	            message.getText());
-
-
-	    // エビデンス取得
-	    getEvidence(new Object() {});
+		// エビデンス取得
+		getEvidence(new Object() {});
 	}
 
 	@Test
@@ -160,31 +140,21 @@ public class Case10 {
 	@DisplayName("テスト05 「退勤」ボタンを押下し退勤時間を登録")
 	void test05() {
 
-	    AttendancePage attendancePage = new AttendancePage(webDriver);
+		AttendancePage attendancePage =
+				new AttendancePage(webDriver);
 
-	    // 「退勤」をクリック
-	    attendancePage.clickClockOut();
+		// 「退勤」をクリック
+		attendancePage.clickClockOut();
 
-	    // 最大5秒待機
-	    WebDriverWait wait =
-	        new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		// 警告ダイアログのOKをクリック
+		attendancePage.acceptAlert();
 
-	    // アラートが表示されるまで待機
-	    Alert alert = wait.until(
-	        ExpectedConditions.alertIsPresent()
-	    );
+		// 登録完了メッセージ確認
+		assertEquals(
+				"勤怠情報の登録が完了しました。",
+				attendancePage.getMessage());
 
-	    // アラートのOKをクリック
-	    alert.accept();
-
-	    // 登録完了メッセージを確認
-	    assertEquals(
-	        "退勤情報の登録が完了しました。",
-	        attendancePage.getMessage()
-	    );
-
-	    // エビデンス取得
-	    getEvidence(new Object() {});
+		// エビデンス取得
+		getEvidence(new Object() {});
 	}
-
 }
