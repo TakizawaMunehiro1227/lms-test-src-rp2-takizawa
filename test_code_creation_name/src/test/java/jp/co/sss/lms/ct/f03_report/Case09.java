@@ -254,15 +254,6 @@ public class Case09 {
 		// 目標の達成度：範囲外
 		reportPage.inputAchievement("11");
 
-		// 所感：正常値
-		reportPage.inputImpression(
-				"今週の学習内容を振り返りました。"
-		);
-
-		// 一週間の振り返り：正常値
-		reportPage.inputWeeklyReview(
-				"一週間を通して計画的に学習しました。"
-		);
 
 		reportPage.clickReportRegist();
 		
@@ -296,11 +287,6 @@ public class Case09 {
 
 		// 所感：未入力
 		reportPage.inputImpression("");
-
-		// 一週間の振り返り：正常値
-		reportPage.inputWeeklyReview(
-				"一週間を通して計画的に学習しました。"
-		);
 
 		// 提出するボタンをクリック
 		reportPage.clickReportRegist();
