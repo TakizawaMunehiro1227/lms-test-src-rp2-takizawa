@@ -1,20 +1,18 @@
 package jp.co.sss.lms.ct.page;
 
-import java.time.Duration;
+import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ReportPage {
 	
 	private WebDriver webDriver;
-	private WebDriverWait wait;
 	
 	// 「未提出」の行にある最初の詳細ボタン
 	@FindBy(xpath = "(//tr[.//*[normalize-space(.)='未提出']]"
@@ -44,6 +42,7 @@ public class ReportPage {
             + "//input[@type='submit' and @value='詳細'])[1]")
     private WebElement reportDetailButton;
     
+    
  // 週報【デモ】の「修正する」ボタン
     @FindBy(xpath = "(//tr[contains(.,'週報【デモ】')]"
             + "//input[@type='submit' and @value='修正する'])[1]")
@@ -69,46 +68,74 @@ public class ReportPage {
     @FindBy(id = "content_2")
     private WebElement weeklyReview;
     
+ // 提出済み日報【デモ】を確認するボタン
+    @FindBy(css = "input[value='提出済み日報【デモ】を確認する']")
+    private WebElement submittedDailyReportButton;
+    
+ // 提出済み週報【デモ】を確認するボタン
+    @FindBy(css = "input[value='提出済み週報【デモ】を確認する']")
+    private WebElement submittedWeeklyReportButton;
+    
+ // 週報提出済みの研修日の詳細ボタン
+    @FindBy(xpath = "(//tr[.//*[normalize-space(.)='提出済み']]"
+            + "//input[@type='submit' and @value='詳細'])[2]")
+    private WebElement submittedDetailLink;
+    
+ // 週報【デモ】の詳細ボタン
+    @FindBy(xpath = "//tr[td[normalize-space()='週報【デモ】']]"
+            + "//input[@type='submit' and @value='詳細']")
+    private WebElement weeklyReportDetailButton;
     
   
 
     // コンストラクタ
     public ReportPage(WebDriver webDriver) {
         this.webDriver = webDriver;
-        this.wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 
         PageFactory.initElements(webDriver, this);
     }
 
     // 詳細をクリック
     public void clickDetail() {
-        wait.until(ExpectedConditions.elementToBeClickable(detailLink));
-        detailLink.click();
+
+    	visibilityTimeout(
+    			By.xpath(
+    					"(//tr[.//*[normalize-space(.)='未提出']]"
+    					+ "//input[@type='submit' and @value='詳細'])[1]"
+    			),
+    			5
+    	);
+
+    	detailLink.click();
     }
     
-    // 提出済み日報をクリック
+ // 日報【デモ】の「提出する」ボタンをクリック
     public void clickReport() {
-        wait.until(ExpectedConditions.elementToBeClickable(reportButton));
-        reportButton.click();
+
+    	visibilityTimeout(
+    			By.cssSelector("input[value='日報【デモ】を提出する']"),
+    			5
+    	);
+
+    	reportButton.click();
     }
     
     //レポート提出するボタンをクリック
     public void clickReportRegist() {
 
-        // 提出するボタンまでスクロール
-        ((JavascriptExecutor) webDriver).executeScript(
-                "arguments[0].scrollIntoView({block:'center'});",
-                reportRegistButton
-        );
+    	visibilityTimeout(
+    			By.xpath(
+    					"//button[@type='submit' and normalize-space()='提出する']"
+    			),
+    			5
+    	);
 
-        // クリック可能になるまで待機
-        WebDriverWait wait =
-                new WebDriverWait(webDriver, Duration.ofSeconds(5));
+    	((JavascriptExecutor) webDriver).executeScript(
+    			"arguments[0].scrollIntoView({block:'center'});",
+    			reportRegistButton
+    	);
 
-        wait.until(ExpectedConditions.elementToBeClickable(reportRegistButton));
-
-        // 提出するボタンをクリック
-        reportRegistButton.click();
+    	reportRegistButton.click();
     }
     // 日報内容を入力
     public void inputReport(String text) {
@@ -118,28 +145,39 @@ public class ReportPage {
     
  // 提出・更新ボタンの表示名を取得
     public String getReportRegistButtonValue() {
-        wait.until(ExpectedConditions.visibilityOf(reportRegistButton));
+     
         return reportRegistButton.getAttribute("value");
     }
     
     
-    //ようこそ●●さんリンクをクリック
-	public void clickWelcome() {
+ // ようこそ●●さんリンクをクリック
+    public void clickWelcome() {
 
-		wait.until(ExpectedConditions.elementToBeClickable(welcomeLink));
-		welcomeLink.click();
-	}
+    	visibilityTimeout(
+    			By.partialLinkText("ようこそ"),
+    			5
+    	);
+
+    	welcomeLink.click();
+    }
 	
-	
-	// 提出済みレポートの詳細をクリック
-	public void clickReportDetail() {
 
-	    wait.until(ExpectedConditions.visibilityOf(reportDetailButton));
+ // 提出済みレポートの詳細をクリック
+    public void clickReportDetail() {
 
-	    ((JavascriptExecutor) webDriver).executeScript(
-	            "arguments[0].click();",
-	            reportDetailButton);
-	}
+    	visibilityTimeout(
+    			By.xpath(
+    					"(//form[contains(@action,'/report/detail')]"
+    					+ "//input[@type='submit' and @value='詳細'])[1]"
+    			),
+    			5
+    	);
+
+    	((JavascriptExecutor) webDriver).executeScript(
+    			"arguments[0].click();",
+    			reportDetailButton
+    	);
+    }
 	
 	//目標の達成度を登録
 	public void inputAchievement(String text) {
@@ -159,21 +197,24 @@ public class ReportPage {
 	    weeklyReview.sendKeys(text);
 	}
 	
-	// 「修正する」ボタンをクリック
+	// 週報【デモ】の「修正する」ボタンをクリック
 	public void clickReportUpdate() {
 
-	    wait.until(ExpectedConditions.visibilityOf(reportUpdateButton));
+		visibilityTimeout(
+				By.xpath(
+						"(//tr[contains(.,'週報【デモ】')]"
+						+ "//input[@type='submit' and @value='修正する'])[1]"
+				),
+				5
+		);
 
-	    // ボタンの位置までスクロール
-	    ((JavascriptExecutor) webDriver).executeScript(
-	            "arguments[0].scrollIntoView({block:'center'});",
-	            reportUpdateButton);
+		// ボタンの位置までスクロール
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].scrollIntoView({block:'center'});",
+				reportUpdateButton
+		);
 
-	    // クリック可能になるまで待機
-	    wait.until(ExpectedConditions.elementToBeClickable(reportUpdateButton));
-
-	    // クリック
-	    reportUpdateButton.click();
+		reportUpdateButton.click();
 	}
 	
 	// 学習項目を入力
@@ -199,7 +240,220 @@ public class ReportPage {
 	    select.selectByValue("");
 	}
 	
+	/**
+	 * 日報の「提出する」ボタンが表示されているか確認
+	 */
+	public boolean isReportButtonDisplayed() {
+
+		visibilityTimeout(
+				By.cssSelector("input[value='日報【デモ】を提出する']"),
+				5
+		);
+
+		return reportButton.isDisplayed();
+	}
+
+	
+	/**
+	 * 未提出の研修日の詳細ボタンが表示されているか確認
+	 */
+	public boolean isDetailDisplayed() {
+
+		visibilityTimeout(
+				By.xpath(
+						"(//tr[.//*[normalize-space(.)='未提出']]"
+						+ "//input[@type='submit' and @value='詳細'])[1]"
+				),
+				5
+		);
+
+		return detailLink.isDisplayed();
+	}
+	
+	/**
+	 * 日報が提出済みになっているか確認
+	 */
+	public boolean isSubmittedDailyReportDisplayed() {
+
+		visibilityTimeout(
+				By.cssSelector(
+						"input[value='提出済み日報【デモ】を確認する']"
+				),
+				5
+		);
+
+		return submittedDailyReportButton.isDisplayed();
+	}
+	
+	/**
+	 * 提出済みレポートの詳細ボタンが表示されているか確認
+	 */
+	public boolean isReportDetailButtonDisplayed() {
+
+		visibilityTimeout(
+				By.xpath(
+						"(//form[contains(@action,'/report/detail')]"
+						+ "//input[@type='submit' and @value='詳細'])[1]"
+				),
+				5
+		);
+
+		return reportDetailButton.isDisplayed();
+	}
+
+	/**
+	 * 週報【デモ】の「修正する」ボタンが表示されているか確認
+	 */
+	public boolean isReportUpdateButtonDisplayed() {
+
+		visibilityTimeout(
+				By.xpath(
+						"(//tr[contains(.,'週報【デモ】')]"
+						+ "//input[@type='submit' and @value='修正する'])[1]"
+				),
+				5
+		);
+
+		return reportUpdateButton.isDisplayed();
+	}
+	
+	/**
+	 * 提出済み週報が表示されているか確認
+	 */
+	public boolean isSubmittedWeeklyReportDisplayed() {
+
+		visibilityTimeout(
+				By.cssSelector(
+						"input[value='提出済み週報【デモ】を確認する']"
+				),
+				5
+		);
+
+		return submittedWeeklyReportButton.isDisplayed();
+	}
+	
+	/**
+	 * 提出済み週報【デモ】を確認するボタンをクリック
+	 */
+	public void clickSubmittedWeeklyReport() {
+
+		visibilityTimeout(
+				By.cssSelector(
+						"input[value='提出済み週報【デモ】を確認する']"
+				),
+				5
+		);
+
+		submittedWeeklyReportButton.click();
+	}
+	
 
 
+	
+	/**
+	 * 週報編集画面が表示されているか確認
+	 */
+	public boolean isWeeklyReportEditDisplayed() {
 
+		visibilityTimeout(
+				By.id("content_1"),
+				5
+		);
+
+		return impression.isDisplayed();
+	}
+	
+
+	
+	/**
+	 * 週報提出済みの研修日の詳細ボタンが表示されているか確認
+	 */
+	public boolean isSubmittedDetailDisplayed() {
+
+		visibilityTimeout(
+				By.xpath(
+						"(//tr[.//*[normalize-space(.)='提出済み']]"
+						+ "//input[@type='submit' and @value='詳細'])[2]"
+				),
+				5
+		);
+
+		return submittedDetailLink.isDisplayed();
+	}
+
+	/**
+	 * 週報提出済みの研修日の詳細ボタンをクリック
+	 */
+	public void clickSubmittedDetail() {
+
+		visibilityTimeout(
+				By.xpath(
+						"(//tr[.//*[normalize-space(.)='提出済み']]"
+						+ "//input[@type='submit' and @value='詳細'])[2]"
+				),
+				5
+		);
+
+		submittedDetailLink.click();
+	}
+	
+	/**
+	 * レポート詳細画面の所感を取得
+	 */
+	public String getReportDetailImpression() {
+
+		By locator = By.xpath(
+				"//tr[*[1][normalize-space()='所感']]/*[2]"
+		);
+
+		visibilityTimeout(locator, 5);
+
+		return webDriver.findElement(locator).getText();
+	}
+
+	/**
+	 * レポート詳細画面の一週間の振り返りを取得
+	 */
+	public String getReportDetailWeeklyReview() {
+
+		By locator = By.xpath(
+				"//tr[*[1][normalize-space()='一週間の振り返り']]/*[2]"
+		);
+
+		visibilityTimeout(locator, 5);
+
+		return webDriver.findElement(locator).getText();
+	}
+	
+	/**
+	 * 週報【デモ】の詳細ボタンをクリック
+	 */
+	public void clickWeeklyReportDetail() {
+
+		visibilityTimeout(
+				By.xpath(
+						"//tr[td[normalize-space()='週報【デモ】']]"
+						+ "//input[@type='submit' and @value='詳細']"
+				),
+				5
+		);
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].click();",
+				weeklyReportDetailButton
+		);
+	}
+	
+	/**
+	 * 入力チェックエラーが表示されているか確認
+	 */
+	public boolean isErrorInputDisplayed() {
+
+		visibilityTimeout(
+				By.className("errorInput"),
+				5
+		);
+
+		return true;
+	}
 }

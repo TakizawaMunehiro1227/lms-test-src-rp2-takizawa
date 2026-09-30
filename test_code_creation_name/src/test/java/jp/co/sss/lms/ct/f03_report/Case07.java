@@ -3,8 +3,6 @@ package jp.co.sss.lms.ct.f03_report;
 import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
 import static org.junit.Assert.*;
 
-import java.time.Duration;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +10,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import jp.co.sss.lms.ct.page.LoginPage;
 import jp.co.sss.lms.ct.page.ReportPage;
@@ -56,19 +52,13 @@ public class Case07 {
 	void test02() {
 
 		LoginPage loginPage = new LoginPage(webDriver);
+		ReportPage reportPage = new ReportPage(webDriver);
 
 		// 初回ログイン済みの受講生ユーザーでログイン
 		loginPage.login("StudentAA01", "StudentAA02");
 
-		// コース詳細画面に遷移するまで待機
-		WebDriverWait wait =
-				new WebDriverWait(webDriver, Duration.ofSeconds(5));
-
-		wait.until(
-				ExpectedConditions.urlToBe(
-						"http://localhost:8080/lms/course/detail"
-				)
-		);
+		// コース詳細画面が表示されるまで待機
+		assertTrue(reportPage.isDetailDisplayed());
 
 		// URLチェック
 		String currentUrl = webDriver.getCurrentUrl();
@@ -91,16 +81,6 @@ public class Case07 {
 		// 未提出の研修日の詳細ボタンをクリック
 		reportPage.clickDetail();
 
-		// セクション詳細画面に遷移するまで待機
-		WebDriverWait wait =
-				new WebDriverWait(webDriver, Duration.ofSeconds(5));
-
-		wait.until(
-				ExpectedConditions.urlToBe(
-						"http://localhost:8080/lms/section/detail"
-				)
-		);
-
 		// URLチェック
 		String currentUrl = webDriver.getCurrentUrl();
 
@@ -108,6 +88,9 @@ public class Case07 {
 				"http://localhost:8080/lms/section/detail",
 				currentUrl
 		);
+
+		// 未提出の日に遷移できていることを確認
+		assertTrue(reportPage.isReportButtonDisplayed());
 
 		getEvidence(new Object() {});
 	}
@@ -122,16 +105,6 @@ public class Case07 {
 		// 日報【デモ】を提出するボタンをクリック
 		reportPage.clickReport();
 
-		// レポート登録画面に遷移するまで待機
-		WebDriverWait wait =
-				new WebDriverWait(webDriver, Duration.ofSeconds(5));
-
-		wait.until(
-				ExpectedConditions.urlToBe(
-						"http://localhost:8080/lms/report/regist"
-				)
-		);
-
 		// URLチェック
 		String currentUrl = webDriver.getCurrentUrl();
 
@@ -145,7 +118,7 @@ public class Case07 {
 
 	@Test
 	@Order(5)
-	@DisplayName("テスト05 報告内容を入力して「提出する」ボタンを押下し確認ボタン名が更新される")
+	@DisplayName("テスト05 報告内容を入力して「提出する」ボタンを押下しレポートが登録されることを確認")
 	void test05() {
 
 		ReportPage reportPage = new ReportPage(webDriver);
@@ -156,23 +129,17 @@ public class Case07 {
 		// 提出するボタンをクリック
 		reportPage.clickReportRegist();
 
-		// セクション詳細画面に遷移するまで待機
-		WebDriverWait wait =
-		        new WebDriverWait(webDriver, Duration.ofSeconds(5));
-
-		wait.until(
-		        ExpectedConditions.urlContains(
-		                "http://localhost:8080/lms/section/detail?sectionId="
-		        )
-		);
+		// 「提出済み日報【デモ】を確認する」が表示され、
+		// 日報が提出済みになったことを確認
+		assertTrue(reportPage.isSubmittedDailyReportDisplayed());
 
 		// URLチェック
 		String currentUrl = webDriver.getCurrentUrl();
 
 		assertTrue(
-		        currentUrl.startsWith(
-		                "http://localhost:8080/lms/section/detail?sectionId="
-		        )
+				currentUrl.startsWith(
+						"http://localhost:8080/lms/section/detail?sectionId="
+				)
 		);
 
 		getEvidence(new Object() {});
